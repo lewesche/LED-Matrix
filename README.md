@@ -1,6 +1,6 @@
 # LED-Matrix
 
-The LED Matrix is a arduino driven 8x8 array of lights with an integrated microphone that hangs up on the wall. I designed the matrix as a fun little test bed for music visualization software, and it came out pretty cool so I thought I'd share. 
+The LED Matrix is a arduino driven 8x8 array of lights with an integrated microphone that hangs up on the wall. I designed the matrix as a fun little test bed for music visualization software, and it came out pretty cool so I thought I'd share. It costs about $40 for all the parts that go into one of these. 
 
 ## 3D Printed Hardware
 
@@ -18,7 +18,14 @@ Note: The LED spec sheet calls for a capacitor connection between the ground and
 
 ## Software
 
+I set up a simple software framework for controlling LED's and measuring audio input. The arduino runs in "freeflow mode", which lets the audio sample at around 10khz and measure frequencies up to 5khz. This could be tweaked to run faster, but I figured that 5khz was probably a reasonable top range. The cheap mic I used seems to have some trouble with low end sounds too, but I'll continue to work on this. Either way, it responds nicely to most music. 
 
+### Frequency Spectrum Analzyer
+
+This is the first sound responsive sketch I've made. It displays a colorful frequency spectrum with lows on the left and highs on the right. The spectrum and background colors change over time, or when the signal dies down.  
+
+### Pop
+This is a simple loop I've been using as a wallpaper. It isn't audio responsive yet, although I'll probably try and change that soon. 
 
 
 
