@@ -1,18 +1,24 @@
 #include <Arduino.h>
+#include "FrequencySpectrum.h"
+#include "Pop.h" 
 #include "Matrix.h"
 
-//Create matrix object
-Matrix matrix;
+//Create animation object
+
+FrequencySpectrum matrix;
+//Pop matrix;
 
 void setup() 
 {   
   Serial.begin(9600);
 }
+
  
 void loop() 
 {
-  matrix.m_drawFrequencySpectrum();
-  //matrix.m_pop();
+  
+  matrix.m_run();
   
 }
+
 

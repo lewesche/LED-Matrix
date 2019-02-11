@@ -6,7 +6,7 @@
 
 class Matrix
 {
-private:
+protected:
   unsigned char m_matrix[8][8][3];
   struct CRGB m_leds[NUM_LED];
   int m_soundLevels[8];
@@ -19,7 +19,7 @@ public:
 
   void m_clear();
   
-private:
+protected:
   int cvtCoords(int x, int y);
 
   void setPercentBrightness(int x, int y, int percentColor);
@@ -31,35 +31,15 @@ private:
   void m_FHT(int scale = 2);
 
   void m_fillSolidColor(unsigned char (&color)[3]);
-  
-///////////////////////////////////////////////////////////////
-///////////////////////// Pop Effect //////////////////////////
-///////////////////////////////////////////////////////////////
-
-private:
-  void m_fadePopIn(int x_center, int y_center, int radius, unsigned char (&color)[3], double period);
-
-  void m_fadePopOut(int x_center, int y_center, int radius, unsigned char (&color)[3], double period, double maxOffset);
 
 public:
-  bool m_pop(double period = 3000.0, double radius = 2.0, int R = 0, int G = 0, int B = 0, double maxOffset = 0.0);
+   virtual bool m_run() = 0;
 
-///////////////////////////////////////////////////////////////
-///////////////////// Frequency Analyzer //////////////////////
-///////////////////////////////////////////////////////////////
-private:
-  void m_newSpectrumColors(unsigned char (&peakColors)[8][3]);
-
-  void m_drawBackground(unsigned char (&backgroundMatrix)[8][8][3], long &backgroundStepTime, long &period, int &steps, int &stepCount, unsigned char (&lastBackgroundColor)[3], unsigned char (&nextBackgroundColor)[3]);
-
-  void m_drawNewPeak(int x, bool &newColors, bool &animating, int (&peaks)[8], unsigned char (&peakColors)[8][3], unsigned long (&setTime)[8]);
-
-  void m_fadePeak(int x, bool &animating, int (&peaks)[8], unsigned char (&peakColors)[8][3], unsigned long (&setTime)[8], unsigned char (&backgroundMatrix)[8][8][3], int (&decayTime));
-
-public:
-  bool m_drawFrequencySpectrum(int decayTime = 250);
 
 };
+
+
+
 
 #endif
 
