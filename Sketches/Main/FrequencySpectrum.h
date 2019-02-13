@@ -26,6 +26,7 @@ private:
   unsigned char m_lastBackgroundColor[3];
   unsigned char m_nextBackgroundColor[3];
   
+  void FrequencySpectrum::m_intro();
   
   void m_newSpectrumColors();
 
@@ -41,4 +42,3 @@ public:
 };
 
 #endif
-

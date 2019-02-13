@@ -3,6 +3,14 @@
 
 #define GRID_SIZE 8
 
+void Pop::m_sumLevels()
+{
+  m_soundSum = 0;
+  m_FHT(); //Sample audio
+  for (int i = 0; i < GRID_SIZE; i++)
+    m_soundSum += m_soundLevels[i];
+}
+
 void Pop::m_fadePopIn(int x_center, int y_center)
 {
   double percentColor;
@@ -25,7 +33,8 @@ void Pop::m_fadePopIn(int x_center, int y_center)
       }
     }
     FastLED.show();    
-    t = (millis() - setTime);  
+    t = millis() - setTime;
+  
 
     if(t > m_period/2)
       return;  
@@ -57,7 +66,8 @@ void Pop::m_fadePopOut(int x_center, int y_center)
       }
     }
     FastLED.show();
-    t = (millis() - setTime);  
+    t = millis() - setTime;
+
     
     if(t > m_period/2)
       return; 
@@ -77,20 +87,12 @@ bool Pop::m_run()
   m_fillSolidColor(m_color);
 
   //Calculate sum of sound levels, once they exceed a threshold procede with the animation
-  int soundSum = 0;
-  while (soundSum < m_soundThreshold)
-  {
-    soundSum = 0;
-    m_FHT(); //Sample audio
-    for (int i = 0; i < GRID_SIZE; i++)
-      soundSum += m_soundLevels[i];
-  }
-
+  while (m_soundSum < m_soundThreshold)
+    m_sumLevels();
+    
+  m_soundSum = 0;
+  
   m_fadePopIn(x_center, y_center);
-
-  //If none is provided, generate a max offset (pop 'intensity') based on the period
-  if(m_maxOffset == 0)
-    m_maxOffset = sqrt(m_period/2);
     
   m_fadePopOut(x_center, y_center);
 

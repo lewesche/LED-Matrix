@@ -3,6 +3,34 @@
 
 #define GRID_SIZE 8
 
+void FrequencySpectrum::m_intro()
+{
+  double fadeTime = 1000;
+  int percentBrightness = 0;
+
+  m_fillSolidColor(m_lastBackgroundColor);
+
+  int setTime = millis();
+  double t = 0;
+  
+  while(true)
+  {
+    for(int y = GRID_SIZE-1; y >= 0; y--)
+    {
+      percentBrightness = pow(t/fadeTime, 3) * (50*(y+1))/(GRID_SIZE);
+      for(int x = 0; x < GRID_SIZE; x++)
+      {
+        setPercentBrightness(x, y, percentBrightness);
+      }
+    } 
+    FastLED.show();
+    t = millis() - setTime; 
+    
+    if (t > fadeTime)
+      return;
+  }
+}
+
 void FrequencySpectrum::m_newSpectrumColors()
 {
   m_getRandomColor(m_peakColors[0]);
@@ -25,7 +53,6 @@ void FrequencySpectrum::m_drawBackground()
   
   if((millis()-m_backgroundStepTime) > m_period/m_steps)
   {
-    //t = 0;
     m_backgroundStepTime = millis();
     
     for(int c = 0; c < 3; c++)
@@ -100,6 +127,10 @@ bool FrequencySpectrum::m_run()
 {
   m_getRandomColor(m_lastBackgroundColor);
   m_getRandomColor(m_nextBackgroundColor);
+  
+  m_clear(); 
+
+  m_intro();
   
   while(true)
     {
