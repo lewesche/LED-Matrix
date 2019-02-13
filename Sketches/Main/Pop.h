@@ -6,9 +6,16 @@
 class Pop : public Matrix
 {
 private:
-  void m_fadePopIn(int x_center, int y_center, int radius, unsigned char (&color)[3], double period);
 
-  void m_fadePopOut(int x_center, int y_center, int radius, unsigned char (&color)[3], double period, double maxOffset);
+  double m_period = 1000.0;
+  double m_radius = 2.0;
+  double m_maxOffset = 0.0;
+  unsigned char m_color[3]; 
+  int m_soundThreshold = 25;
+  
+  void m_fadePopIn(int x_center, int y_center);
+
+  void m_fadePopOut(int x_center, int y_center);
 
 public:
   bool m_run();
@@ -16,4 +23,3 @@ public:
 };
 
 #endif
-

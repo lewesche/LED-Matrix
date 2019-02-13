@@ -171,7 +171,7 @@ void Matrix::m_FHT(int scale)
 
 //  for (int i = 0; i < 8; i++)
 //  {
-//    Serial.print(level[i]);
+//    Serial.print(m_soundLevels[i]);
 //    Serial.print(" ");
 //  }
 //  Serial.println(" ");
@@ -202,8 +202,6 @@ void Matrix::m_clear()
         m_matrix[x][y][c] = 0;
       m_leds[cvtCoords(x, y)].setRGB(0, 0, 0);
     }
+  
+  FastLED.show();
 }
-
-
-
-

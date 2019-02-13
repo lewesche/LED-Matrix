@@ -5,8 +5,8 @@
 
 //Create animation object
 
-FrequencySpectrum matrix;
-//Pop matrix;
+//FrequencySpectrum matrix;
+Pop matrix;
 
 void setup() 
 {   
@@ -20,5 +20,3 @@ void loop()
   matrix.m_run();
   
 }
-
-

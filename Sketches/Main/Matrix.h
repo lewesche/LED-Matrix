@@ -35,11 +35,9 @@ protected:
 public:
    virtual bool m_run() = 0;
 
-
 };
 
 
 
 
 #endif
-
