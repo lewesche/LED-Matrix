@@ -9,8 +9,9 @@ class Matrix
 protected:
   unsigned char m_matrix[8][8][3];
   struct CRGB m_leds[NUM_LED];
+  int m_soundScale = 3;
   int m_soundLevels[8];
-  
+  int m_soundLevelSum = 0;
 ///////////////////////////////////////////////////////////////
 ////////////////////// General Functions //////////////////////
 ///////////////////////////////////////////////////////////////
@@ -28,7 +29,7 @@ protected:
 
   void m_getRandomColor(unsigned char (&color)[3]);
 
-  void m_FHT(int scale = 2);
+  void m_FHT();
 
   void m_fillSolidColor(unsigned char (&color)[3]);
 

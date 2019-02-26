@@ -154,11 +154,8 @@ void FrequencySpectrum::m_sleep()
   {
     m_FHT();
     
-    for(int i = 0; i < GRID_SIZE; i++)
-        if(m_soundLevels[i] > 2)
-        {  
-          return;
-        }
+    if(m_soundLevelSum > 8)
+      return;
   }
 }
 

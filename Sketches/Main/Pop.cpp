@@ -3,14 +3,6 @@
 
 #define GRID_SIZE 8
 
-void Pop::m_sumLevels()
-{
-  m_soundSum = 0;
-  m_FHT(); //Sample audio
-  for (int i = 0; i < GRID_SIZE; i++)
-    m_soundSum += m_soundLevels[i];
-}
-
 void Pop::m_fadePopIn(int x_center, int y_center)
 {
   double percentColor;
@@ -87,10 +79,10 @@ bool Pop::m_run()
   m_fillSolidColor(m_color);
 
   //Calculate sum of sound levels, once they exceed a threshold procede with the animation
-  while (m_soundSum < m_soundThreshold)
-    m_sumLevels();
+  while (m_soundLevelSum < m_soundThreshold)
+    m_FHT(); //Sample audio
     
-  m_soundSum = 0;
+//  m_soundSum = 0;
   
   m_fadePopIn(x_center, y_center);
     

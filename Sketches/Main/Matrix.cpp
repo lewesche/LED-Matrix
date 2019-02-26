@@ -24,6 +24,12 @@
 #define MAX_BRIGHTNESS 151
 #define GRID_SIZE 8
 
+/////// TURNING DEBUG MODES ON PRINTS DATA TO SERIAL PLOTTER ///////
+////// MAKES MATRIX RUN MUCH WORSE, LEAVE OFF IN FINAL CONFIG //////
+////////////////////// ONLY USE ONE AT A TIME //////////////////////
+//#define DEBUG_SOUND_LEVELS
+//#define DEBUG_MIC_INPUTS
+
 
 ///////////////////////////////////////////////////////////////
 ////////////////////// General Functions //////////////////////
@@ -124,7 +130,7 @@ void Matrix::m_getRandomColor(unsigned char (&color)[3])
     }
 }
 
-void Matrix::m_FHT(int scale)
+void Matrix::m_FHT()
 {
   for (int i = 0; i < FHT_N; i++) { // save FHT_N samples
     while (!(ADCSRA & /*0x10*/_BV(ADIF))); // wait for adc to be ready (ADIF)
@@ -152,36 +158,47 @@ void Matrix::m_FHT(int scale)
   //Convolve across first half of bins
   for (int i = 4; i < 8; i++)
   {
-    m_soundLevels[i-4] = (fht_lin_out8[i-1] + fht_lin_out8[i] + fht_lin_out8[i+1])/(3*scale);
+    m_soundLevels[i-4] = (fht_lin_out8[i-1] + fht_lin_out8[i] + fht_lin_out8[i+1])/(3*m_soundScale);
   }
   
   //Convolve across second half of bins
   for (int i = 9; i < 13; i++)
   {
-    m_soundLevels[i-5] = (fht_lin_out8[i-1] + fht_lin_out8[i] + fht_lin_out8[i+1])/(3*scale);
+    m_soundLevels[i-5] = (fht_lin_out8[i-1] + fht_lin_out8[i] + fht_lin_out8[i+1])/(3*m_soundScale);
   }
 
+  m_soundLevelSum = 0;
+  
   for(int i = 0; i < GRID_SIZE; i++)
   {
     if(m_soundLevels[i] > 7)
       m_soundLevels[i] = 7;
+
+    m_soundLevelSum += m_soundLevels[i];
   }
+
+
   
 //  Print statements for debugging and tweaking spectrum constants 
 
-//  for (int i = 0; i < 8; i++)
-//  {
-//    Serial.print(m_soundLevels[i]);
-//    Serial.print(" ");
-//  }
-//  Serial.println(" ");
+#ifdef DEBUG_SOUND_LEVELS
 
-//  for (int i = 3; i < 14; i++)
-//  {
-//    Serial.print(fht_lin_out8[i]);
-//    Serial.print(" ");
-//  }
-//  Serial.println(" ");
+  for (int i = 0; i < 8; i++)
+  {
+    Serial.print(m_soundLevels[i]);
+    Serial.print(" ");
+  }
+  Serial.println(" ");
+#endif
+
+#ifdef DEBUG_MIC_OUTPUTS
+  for (int i = 3; i < 14; i++)
+  {
+    Serial.print(fht_lin_out8[i]);
+    Serial.print(" ");
+  }
+  Serial.println(" ");
+#endif
 
 }
 
