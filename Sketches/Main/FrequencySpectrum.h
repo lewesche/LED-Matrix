@@ -29,7 +29,7 @@ private:
   unsigned char m_fadeColor[3] {0};
   
   //Sleep variables
-  unsigned long m_downTime;
+  unsigned long m_downTime = 0;
   const unsigned long m_sleepTime = 20000; // Goes to sleep after 20 seconds of no sound
   
   void m_intro(int fadeTime = 1000);
@@ -47,7 +47,7 @@ private:
   void m_sleep();
   
 public:
-  bool m_run();
+  void m_run();
 
 };
 

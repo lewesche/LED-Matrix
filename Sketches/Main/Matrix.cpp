@@ -18,6 +18,7 @@
 
 ////LED Defines////
 #define LED_DATA 3
+#define BUTTON_PIN 5
 #define COLOR_ORDER GRB
 #define LED_TYPE WS2812B
 #define NUM_LED 64
@@ -47,6 +48,17 @@ Matrix:: Matrix()
   ////LED Setup////
   LEDS.addLeds<LED_TYPE, LED_DATA, COLOR_ORDER>(m_leds, NUM_LED);
   void m_clear(); 
+  pinMode(BUTTON_PIN, INPUT_PULLUP);
+  ////Button Setup////
+  
+}
+
+bool Matrix::checkButton()
+{
+  if(digitalRead(BUTTON_PIN) == HIGH)
+    return false;
+  else
+    return true;
 }
 
 int Matrix::cvtCoords(int x, int y)
@@ -204,10 +216,13 @@ void Matrix::m_FHT()
 
 void Matrix::m_fillSolidColor(unsigned char (&color)[3])
 {
-  for(int x = 0; x <= GRID_SIZE; x++)       
-    for(int y = 0; y <= GRID_SIZE; y++)
+  for(int x = 0; x < GRID_SIZE; x++)       
+    for(int y = 0; y < GRID_SIZE; y++)
+    {
       for(int c = 0; c < 3; c++)                        
-        m_matrix[x][y][c] = color[c];     
+        m_matrix[x][y][c] = color[c];
+      m_leds[cvtCoords(x, y)].setRGB(color[0], color[1], color[2]);
+    }     
 }
 
 void Matrix::m_clear()
@@ -221,4 +236,19 @@ void Matrix::m_clear()
     }
   
   FastLED.show();
+}
+
+void Matrix::m_off()
+{
+  m_clear();
+
+  while(checkButton()) // Wait for user to release the button
+  {
+  }
+  
+  while(true)
+  {
+    if(checkButton())
+      return;
+  }
 }

@@ -1,6 +1,7 @@
 #include <Arduino.h>
 #include "FrequencySpectrum.h"
 #include "Pop.h" 
+#include "Slide.h"
 #include "Matrix.h"
 
 //Create a pointer to a matrix base class
@@ -15,13 +16,14 @@ void setup()
 
 void loop() 
 {
-  for(int i = 0; i < 3; i++)
-  {
-    matrix = new Pop;
-    matrix->m_run();
-    delete matrix;
-  }
-
-  matrix = new FrequencySpectrum();
+  matrix = new FrequencySpectrum;
   matrix->m_run();
+  delete matrix;
+
+  matrix = new Pop;
+  matrix->m_run();
+  delete matrix;
+
+  matrix->m_off();
+  delete matrix;
 }

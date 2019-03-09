@@ -3,7 +3,7 @@
 
 #define GRID_SIZE 8
 
-void Pop::m_fadePopIn(int x_center, int y_center)
+bool Pop::m_fadePopIn(int x_center, int y_center)
 {
   double percentColor;
   double distance;
@@ -26,14 +26,16 @@ void Pop::m_fadePopIn(int x_center, int y_center)
     }
     FastLED.show();    
     t = millis() - setTime;
-  
 
+    if(checkButton())
+      return false;
+    
     if(t > m_period/2)
-      return;  
+      return true;  
   }  
 }
 
-void Pop::m_fadePopOut(int x_center, int y_center)
+bool Pop::m_fadePopOut(int x_center, int y_center)
 {
   double percentColor;
   double distance;
@@ -59,17 +61,19 @@ void Pop::m_fadePopOut(int x_center, int y_center)
     }
     FastLED.show();
     t = millis() - setTime;
-
+    
+    if(checkButton())
+      return false;
     
     if(t > m_period/2)
-      return; 
+      return true;
   }  
 }
 
-bool Pop::m_run()
+bool Pop::m_singlePop()
 {
   m_clear();
-  
+
   //Generate center
   double x_center = random(1, 7); 
   double y_center = random(1, 7);
@@ -80,15 +84,35 @@ bool Pop::m_run()
 
   //Calculate sum of sound levels, once they exceed a threshold procede with the animation
   while (m_soundLevelSum < m_soundThreshold)
+  {
     m_FHT(); //Sample audio
     
-//  m_soundSum = 0;
-  
-  m_fadePopIn(x_center, y_center);
-    
-  m_fadePopOut(x_center, y_center);
+    if(checkButton())
+      return false;
+  }
 
+  
+  if(m_fadePopIn(x_center, y_center) == false)
+    return false;
+    
+  if(m_fadePopOut(x_center, y_center) == false)
+    return false;
+    
   m_clear(); 
 
   return true;
+}
+
+void Pop::m_run()
+{
+  while(checkButton()) // Wait for user to release the button
+  {
+  }
+  
+  while(m_singlePop())
+  {
+    m_FHT();
+  }
+  
+  return;
 }

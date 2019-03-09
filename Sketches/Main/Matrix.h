@@ -21,6 +21,8 @@ public:
   void m_clear();
   
 protected:
+  bool checkButton();
+  
   int cvtCoords(int x, int y);
 
   void setPercentBrightness(int x, int y, int percentColor);
@@ -34,8 +36,9 @@ protected:
   void m_fillSolidColor(unsigned char (&color)[3]);
 
 public:
-   virtual bool m_run() = 0;
-
+   virtual void m_run() = 0;
+   
+   void m_off();
 };
 
 

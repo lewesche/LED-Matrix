@@ -14,12 +14,14 @@ private:
   int m_soundThreshold = 7;
   int m_soundSum = 0;
   
-  void m_fadePopIn(int x_center, int y_center);
+  bool m_fadePopIn(int x_center, int y_center);
 
-  void m_fadePopOut(int x_center, int y_center);
+  bool m_fadePopOut(int x_center, int y_center);
 
 public:
-  bool m_run();
+  bool m_singlePop();
+
+  void m_run();
 
 };
 

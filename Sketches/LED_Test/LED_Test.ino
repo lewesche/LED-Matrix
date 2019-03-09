@@ -1,51 +1,31 @@
 #include <FastLED.h>
 
 #define LED_DATA 3
+#define BUTTON_PIN 5
 #define COLOR_ORDER GRB
 #define LED_TYPE WS2812
 #define NUM_LED 64
 
 int maxBrightness = 100; 
+int wait_t = 15;
 
 struct CRGB leds[NUM_LED];
 
 
 void setup() {
   LEDS.addLeds<LED_TYPE, LED_DATA, COLOR_ORDER>(leds, NUM_LED); 
-  //FastLED.setBrightness(maxBrightness);
+  pinMode(BUTTON_PIN, INPUT_PULLUP);
+  Serial.begin(9600);
 }
 
 void loop() {
-//int t = 30;
-//
-//for(int i = 0; i < NUM_LED; i++)
-//{
-//  FastLED.clear();
-//  leds[i].setRGB(50, 0, 0);
-//  FastLED.show();
-//  delay(t);
-//}
-//
-//for(int i = 0; i < NUM_LED; i++)
-//{
-//  FastLED.clear();
-//  leds[i].setRGB(0, 50, 0);
-//  FastLED.show();
-//  delay(t);
-//}
-//
-//for(int i = 0; i < NUM_LED; i++)
-//{
-//  FastLED.clear();
-//  leds[i].setRGB(0, 0, 50);
-//  FastLED.show();
-//  delay(t);
-//}
-//
-//FastLED.clear();
-//FastLED.show();
-//delay(1000);
 
+while(digitalRead(BUTTON_PIN) == HIGH)
+{
+  Serial.println("off");
+}
+
+Serial.println("on");
 
 for(int c = 0; c < maxBrightness; c++)
 {
@@ -55,7 +35,7 @@ for(int c = 0; c < maxBrightness; c++)
     leds[i].setRGB(c, 0, 0);  
   }
   FastLED.show();
-  delay(25);
+  delay(wait_t);
 }
 
 for(int c = maxBrightness; c >=0; c--)
@@ -66,7 +46,7 @@ for(int c = maxBrightness; c >=0; c--)
     leds[i].setRGB(c, 0, 0);  
   }
   FastLED.show();
-  delay(25);
+  delay(wait_t);
 }
 
 
@@ -78,7 +58,7 @@ for(int c = 0; c < maxBrightness; c++)
     leds[i].setRGB(0, 0, c);  
   }
   FastLED.show();
-  delay(25);
+  delay(wait_t);
 }
 
 for(int c = maxBrightness; c >=0; c--)
@@ -89,7 +69,7 @@ for(int c = maxBrightness; c >=0; c--)
     leds[i].setRGB(0, 0, c);  
   }
   FastLED.show();
-  delay(25);
+  delay(wait_t);
 }
 
 
@@ -102,7 +82,7 @@ for(int c = 0; c < maxBrightness; c++)
     leds[i].setRGB(0, c, 0);  
   }
   FastLED.show();
-  delay(25);
+  delay(wait_t);
 }
 
 for(int c = maxBrightness; c >=0; c--)
@@ -113,7 +93,7 @@ for(int c = maxBrightness; c >=0; c--)
     leds[i].setRGB(0, c, 0);  
   }
   FastLED.show();
-  delay(25);
+  delay(wait_t);
 }
 
 
@@ -123,7 +103,3 @@ for(int c = maxBrightness; c >=0; c--)
 
 
 }
-
-
-
-

@@ -6,7 +6,6 @@
 void FrequencySpectrum::m_intro(int fadeTime)
 {
   int percentBrightness = 0;
-
   m_fillSolidColor(m_fadeColor);
 
   unsigned long setTime = millis();
@@ -24,7 +23,6 @@ void FrequencySpectrum::m_intro(int fadeTime)
     } 
     FastLED.show();
     t = millis() - setTime; 
-    
     if (t > fadeTime)
       return;
   }
@@ -51,11 +49,10 @@ void FrequencySpectrum::m_drawBackground()
   
   if((millis()-m_backgroundStepTime) > m_period/m_steps)
   {
-    m_backgroundStepTime = millis();
-    
+    m_backgroundStepTime = millis();  
     for(int c = 0; c < 3; c++)
       m_fadeColor[c] = (m_lastBackgroundColor[c]*(m_steps-m_stepCount) + m_nextBackgroundColor[c]*m_stepCount)/m_steps;
-    
+
     for(int y = 0; y < GRID_SIZE; y++)
     {
       percentBrightness = (50*(y+1))/(GRID_SIZE);
@@ -121,7 +118,6 @@ void FrequencySpectrum::m_fadePeak(int x)
 void FrequencySpectrum::m_outro(int fadeTime)
 {
   int percentBrightness;
-
   unsigned long setTime = millis();
   unsigned long t = 0;
 
@@ -153,21 +149,22 @@ void FrequencySpectrum::m_sleep()
   while(true)
   {
     m_FHT();
-    
     if(m_soundLevelSum > 8)
       return;
   }
 }
 
-bool FrequencySpectrum::m_run()
+void FrequencySpectrum::m_run()
 {
   m_getRandomColor(m_lastBackgroundColor);
   m_getRandomColor(m_nextBackgroundColor);
   
   m_clear(); 
 
-  //Intro requires a known fade status, run the background function once to get valid m_fadeColor array
-  m_drawBackground();
+  //Intro requires a known fade status
+  for(int c = 0; c < 3; c++)
+    m_fadeColor[c] = m_lastBackgroundColor[c];
+  
   m_intro();
 
   
@@ -179,6 +176,13 @@ bool FrequencySpectrum::m_run()
     //Fill in the background
     m_drawBackground();
 
+    //Terminate if button is pushed
+    if(checkButton())
+    {
+      m_outro(1500);
+      return;
+    }
+    
     //Logic for generating new colors and sleeping
     if(!m_animating) // If the screen isn't currently plotting frequencies
     {
