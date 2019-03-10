@@ -105,6 +105,8 @@ bool Pop::m_singlePop()
 
 void Pop::m_run()
 {
+  Serial.println("In Pop");
+  
   while(checkButton()) // Wait for user to release the button
   {
   }
@@ -113,6 +115,7 @@ void Pop::m_run()
   {
     m_FHT();
   }
-  
+
+  Serial.println("Returning Control");
   return;
 }

@@ -241,7 +241,7 @@ void Matrix::m_clear()
 void Matrix::m_off()
 {
   m_clear();
-
+  Serial.println("In off");
   while(checkButton()) // Wait for user to release the button
   {
   }
@@ -249,6 +249,9 @@ void Matrix::m_off()
   while(true)
   {
     if(checkButton())
+    {
+      Serial.println("Returning control");
       return;
+    }
   }
 }

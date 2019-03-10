@@ -156,6 +156,8 @@ void FrequencySpectrum::m_sleep()
 
 void FrequencySpectrum::m_run()
 {
+  Serial.println("In Frequency Spectrum");
+  
   m_getRandomColor(m_lastBackgroundColor);
   m_getRandomColor(m_nextBackgroundColor);
   
@@ -179,6 +181,7 @@ void FrequencySpectrum::m_run()
     //Terminate if button is pushed
     if(checkButton())
     {
+      Serial.println("Returning Control");
       m_outro(1500);
       return;
     }

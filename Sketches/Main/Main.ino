@@ -16,14 +16,16 @@ void setup()
 
 void loop() 
 {
-  matrix = new FrequencySpectrum;
-  matrix->m_run();
-  delete matrix;
-
-  matrix = new Pop;
-  matrix->m_run();
-  delete matrix;
-
-  matrix->m_off();
-  delete matrix;
+  while(true)
+  {
+    matrix = new FrequencySpectrum;
+    matrix->m_run();
+    delete matrix;
+  
+    matrix = new Pop;
+    matrix->m_run();
+  
+    matrix->m_off();
+    delete matrix;
+  }
 }
