@@ -6,7 +6,7 @@
 void FrequencySpectrum::m_intro(int fadeTime)
 {
   int percentBrightness = 0;
-  m_fillSolidColor(m_fadeColor);
+  m_fillSolidColor(m_backgroundColor);
 
   unsigned long setTime = millis();
   unsigned long t = 0;
@@ -30,9 +30,20 @@ void FrequencySpectrum::m_intro(int fadeTime)
 
 void FrequencySpectrum::m_newSpectrumColors()
 {
-  m_getRandomColor(m_peakColors[0]);
-  m_getRandomColor(m_peakColors[GRID_SIZE-1]);
   
+  for(int i = 0; i < 2; i++)
+  {
+    m_getRandomColor(m_lastPeakEndColors[i]);
+    m_getRandomColor(m_nextPeakEndColors[i]);
+  }
+
+  for(int i = 0; i < 3; i++)
+  {
+    m_peakColors[0][i] = m_lastPeakEndColors[0][i];
+    m_peakColors[GRID_SIZE-1][i] = m_lastPeakEndColors[1][i];
+  }
+
+  // Fill in interior colors
   for(int i = 1; i < GRID_SIZE-1; i++)
   {
     for(int c = 0; c < 3; c++)
@@ -40,6 +51,8 @@ void FrequencySpectrum::m_newSpectrumColors()
       m_peakColors[i][c] = (m_peakColors[0][c] * (GRID_SIZE-1-i) + m_peakColors[GRID_SIZE-1][c] * i) / 7;
     }
   }    
+
+  m_peakStepCount = 0;
 }
 
 void FrequencySpectrum::m_drawBackground()
@@ -47,11 +60,11 @@ void FrequencySpectrum::m_drawBackground()
   int percentBrightness = 0;
   int percentFade = 0;
   
-  if((millis()-m_backgroundStepTime) > m_period/m_steps)
+  if((millis()-m_backgroundStepTime) > m_backgroundPeriod/m_backgroundSteps)
   {
     m_backgroundStepTime = millis();  
     for(int c = 0; c < 3; c++)
-      m_fadeColor[c] = (m_lastBackgroundColor[c]*(m_steps-m_stepCount) + m_nextBackgroundColor[c]*m_stepCount)/m_steps;
+      m_backgroundColor[c] = (m_lastBackgroundColor[c]*(m_backgroundSteps-m_backgroundStepCount) + m_nextBackgroundColor[c]*m_backgroundStepCount)/m_backgroundSteps;
 
     for(int y = 0; y < GRID_SIZE; y++)
     {
@@ -59,23 +72,23 @@ void FrequencySpectrum::m_drawBackground()
       for(int x = 0; x < GRID_SIZE; x++)
       {
         m_leds[cvtCoords(x, y)].setRGB(
-          (m_fadeColor[0]*percentBrightness)/100,
-          (m_fadeColor[1]*percentBrightness)/100, 
-          (m_fadeColor[2]*percentBrightness)/100);
+          (m_backgroundColor[0]*percentBrightness)/100,
+          (m_backgroundColor[1]*percentBrightness)/100, 
+          (m_backgroundColor[2]*percentBrightness)/100);
         for(int c = 0; c < 3; c++)
-          m_backgroundMatrix[x][y][c] = (m_fadeColor[c]*percentBrightness)/100;
+          m_backgroundMatrix[x][y][c] = (m_backgroundColor[c]*percentBrightness)/100;
       }
     }
-    m_stepCount+=1;
+    m_backgroundStepCount+=1;
   }
 
   
-  if(m_stepCount > m_steps)
+  if(m_backgroundStepCount > m_backgroundSteps)
   {
     for(int c = 0; c < 3; c++)
       m_lastBackgroundColor[c] = m_nextBackgroundColor[c];
     m_getRandomColor(m_nextBackgroundColor);
-    m_stepCount = 0;
+    m_backgroundStepCount = 0;
   }
 }
 
@@ -93,6 +106,48 @@ void FrequencySpectrum::m_drawNewPeak(int x)
 
 void FrequencySpectrum::m_fadePeak(int x)
 {  
+//
+//  if(m_peakCycleTime > m_peakPeriod)
+//  {
+//    //Cycle end colors
+//    if((millis()-m_peakStepTime) > m_peakPeriod/m_peakSteps)
+//    {
+//      m_peakStepTime = millis();
+//      for(int c = 0; c < 3; c++)
+//      {
+//        m_peakColors[0][c] = (m_lastPeakEndColors[0][c]*(m_peakSteps-m_peakStepCount) + m_nextPeakEndColors[0][c]*m_peakStepCount)/m_peakSteps;
+//        m_peakColors[GRID_SIZE-1][c] = (m_lastPeakEndColors[1][c]*(m_peakSteps-m_peakStepCount) + m_nextPeakEndColors[1][c]*m_peakStepCount)/m_peakSteps;
+//      }
+//      m_peakStepCount++;
+//      Serial.println(m_peakStepCount);
+//    }
+//  
+//    // Fill in interior colors
+//    for(int i = 1; i < GRID_SIZE-1; i++)
+//    {
+//      for(int c = 0; c < 3; c++)
+//      {
+//        m_peakColors[i][c] = (m_peakColors[0][c] * (GRID_SIZE-1-i) + m_peakColors[GRID_SIZE-1][c] * i) / 7;
+//      }
+//    }
+//    
+//    if(m_peakStepCount > m_peakSteps)
+//    {
+//      for(int c = 0; c < 3; c++)
+//      {
+//        m_lastPeakEndColors[0][c] = m_nextPeakEndColors[0][c];
+//        m_lastPeakEndColors[1][c] = m_nextPeakEndColors[1][c];
+//      }
+//      m_getRandomColor(m_nextPeakEndColors[0]);
+//      m_getRandomColor(m_nextPeakEndColors[1]);
+//      m_peakStepCount = 0;
+//      m_peakCycleTime = 0;
+//    }
+//  }
+// 
+//  m_peakCycleTime += 10;
+  
+  //Draw new peaks, drop existing peaks
   for (int y = 0; y < m_peaks[x]; y++)
   {
     for(int c = 0; c < 3; c++)
@@ -115,13 +170,59 @@ void FrequencySpectrum::m_fadePeak(int x)
   }
 } 
 
+void FrequencySpectrum::m_transitionPeakColors()
+{
+  
+  if(m_peakCycleTime > 2*m_peakPeriod)
+  {
+    //Cycle end colors
+    if((millis()-m_peakStepTime) > m_peakPeriod/m_peakSteps)
+    {
+      m_peakStepTime = millis();
+      for(int c = 0; c < 3; c++)
+      {
+        m_peakColors[0][c] = (m_lastPeakEndColors[0][c]*(m_peakSteps-m_peakStepCount) + m_nextPeakEndColors[0][c]*m_peakStepCount)/m_peakSteps;
+        m_peakColors[GRID_SIZE-1][c] = (m_lastPeakEndColors[1][c]*(m_peakSteps-m_peakStepCount) + m_nextPeakEndColors[1][c]*m_peakStepCount)/m_peakSteps;
+      }
+      m_peakStepCount++;
+      Serial.println(m_peakStepCount);
+    }
+  
+    // Fill in interior colors
+    for(int i = 1; i < GRID_SIZE-1; i++)
+    {
+      for(int c = 0; c < 3; c++)
+      {
+        m_peakColors[i][c] = (m_peakColors[0][c] * (GRID_SIZE-1-i) + m_peakColors[GRID_SIZE-1][c] * i) / 7;
+      }
+    }
+    
+    if(m_peakStepCount > m_peakSteps)
+    {
+      for(int c = 0; c < 3; c++)
+      {
+        m_lastPeakEndColors[0][c] = m_nextPeakEndColors[0][c];
+        m_lastPeakEndColors[1][c] = m_nextPeakEndColors[1][c];
+      }
+      m_getRandomColor(m_nextPeakEndColors[0]);
+      m_getRandomColor(m_nextPeakEndColors[1]);
+      m_peakStepCount = 0;
+      m_peakCycleTime = 0;
+    }
+  }
+ 
+  m_peakCycleTime += 10;
+
+  return;
+}
+
 void FrequencySpectrum::m_outro(int fadeTime)
 {
   int percentBrightness;
   unsigned long setTime = millis();
   unsigned long t = 0;
 
-  m_fillSolidColor(m_fadeColor);
+  m_fillSolidColor(m_backgroundColor);
   
   while(true)
   {
@@ -165,7 +266,7 @@ void FrequencySpectrum::m_run()
 
   //Intro requires a known fade status
   for(int c = 0; c < 3; c++)
-    m_fadeColor[c] = m_lastBackgroundColor[c];
+    m_backgroundColor[c] = m_lastBackgroundColor[c];
   
   m_intro();
 
@@ -224,6 +325,8 @@ void FrequencySpectrum::m_run()
         m_animating = true; m_downTime = 0;
       }   
     }   
+    if(m_animating)
+      m_transitionPeakColors();
     FastLED.show();
   } 
      

@@ -12,7 +12,14 @@ private:
   //Animation Variables
   const int m_decayTime = 250; //Time it takes for one pixel in a peak to decay;
   int m_peaks[GRID_SIZE] {0};
+  unsigned char m_lastPeakEndColors[2][3];
+  unsigned char m_nextPeakEndColors[2][3];
   unsigned char m_peakColors[GRID_SIZE][3];
+  const long m_peakPeriod = 5000;
+  unsigned long m_peakCycleTime = 0;
+  long m_peakStepTime = 0;
+  const int m_peakSteps = 120;
+  int m_peakStepCount = 0;
   bool m_newColors = false;
   bool m_animating = false;
   unsigned long m_setTime[GRID_SIZE] {0};
@@ -21,16 +28,16 @@ private:
   //Background Variables
   unsigned char m_backgroundMatrix[GRID_SIZE][GRID_SIZE][3];
   long m_backgroundStepTime = 0; 
-  const long m_period = 30000;
-  const int m_steps = 120;
-  int m_stepCount = 0;
+  const long m_backgroundPeriod = 30000;
+  const int m_backgroundSteps = 120;
+  int m_backgroundStepCount = 0;
   unsigned char m_lastBackgroundColor[3];
   unsigned char m_nextBackgroundColor[3];
-  unsigned char m_fadeColor[3] {0};
+  unsigned char m_backgroundColor[3] {0};
   
   //Sleep variables
   unsigned long m_downTime = 0;
-  const unsigned long m_sleepTime = 20000; // Goes to sleep after 20 seconds of no sound
+  const unsigned long m_sleepTime = 3000; // Goes to sleep after 3 seconds of no sound
   
   void m_intro(int fadeTime = 1000);
   
@@ -42,7 +49,9 @@ private:
 
   void m_fadePeak(int x);
 
-  void m_outro(int fadeTime = 1000);
+  void m_transitionPeakColors();
+
+  void m_outro(int fadeTime = 2000);
 
   void m_sleep();
   
