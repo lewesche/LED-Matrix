@@ -27,6 +27,7 @@ I set up a simple software framework for controlling LED's and measuring audio i
 I used two awesome libraries for the project:
 
 http://fastled.io/ - the ubiquitous FastLED
+
 http://wiki.openmusiclabs.com/wiki/ArduinoFHT - Awesome FHT implementation by OpenMusicLabs
 
 ## Animations
