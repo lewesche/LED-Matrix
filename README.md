@@ -18,9 +18,7 @@ Three parts make up the structure of the Matrix, and they are all easy to 3D pri
 
 The printed parts include a housing that the other parts slide into, a set of dividers to seperate the light coming from each LED, and a top to seal it off. I would suggest printing with black PLA, since dark colors do a good job of keeping light from bleeding through cells. If a soldered connection or LED ever fails, its super easy to remove and work on the PCB. The only passive hardware not 3D printed is the 8 inch square black accrylic screen, which is a pretty easy thing to find for a couple bucks. 
 
-Asembely Pics:
-
-https://drive.google.com/open?id=1HWLcNDVe-Ao-Pyr7k9aOO6FC9LVxDk2P
+Asembely Pics: https://drive.google.com/open?id=1HWLcNDVe-Ao-Pyr7k9aOO6FC9LVxDk2P
 
 ## Software
 
