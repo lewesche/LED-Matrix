@@ -1,6 +1,6 @@
 # LED-Matrix
 
-# https://www.youtube.com/watch?v=jVYRgS695s0&fbclid=IwAR1OD_sazcJwwZFTdqP10BqMdPewttWTMSlTIxPb6Re7gO50KjPQsa7xVBo
+## https://www.youtube.com/watch?v=jVYRgS695s0&fbclid=IwAR1OD_sazcJwwZFTdqP10BqMdPewttWTMSlTIxPb6Re7gO50KjPQsa7xVBo
 
 The LED Matrix is a arduino driven 8x8 array of lights with an integrated microphone that hangs up on the wall. I designed the matrix as a fun little test bed for music visualization software, and it came out pretty cool so I thought I'd share. It costs about $40 for all the parts that go into one of these. 
 
