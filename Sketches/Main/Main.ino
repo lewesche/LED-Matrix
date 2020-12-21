@@ -1,7 +1,7 @@
 #include <Arduino.h>
 #include "FrequencySpectrum.h"
 #include "Pop.h" 
-#include "Slide.h"
+//#include "Slide.h"
 #include "Matrix.h"
 
 //Create a pointer to a matrix base class

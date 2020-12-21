@@ -10,7 +10,7 @@ private:
   double m_period = 1000.0;
   double m_radius = 2.0;
   double m_maxOffset = sqrt(m_period/2);
-  unsigned char m_color[3]; 
+  color_t m_color; 
   int m_soundThreshold = 7;
   int m_soundSum = 0;
   

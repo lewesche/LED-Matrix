@@ -50,9 +50,9 @@ bool Pop::m_fadePopOut(int x_center, int y_center)
   while(true)                    
   {
     offset = m_maxOffset * (1 - (m_period/2 -static_cast<double>(t))/(m_period/2));
-    for(double x = 0; x < GRID_SIZE; x++)       
+    for(double x = 0; x < GRID_SIZE; ++x)       
     {
-      for(double y = 0; y < GRID_SIZE; y++)
+      for(double y = 0; y < GRID_SIZE; ++y)
       {
         distance = sqrt((x_center-x)*(x_center-x) + (y_center-y)*(y_center-y));
         percentColor = ((100.0*(m_period/2 - static_cast<double>(t)))/m_period) * (m_radius/(distance + m_radius)) * (m_radius/(abs(distance-offset) + m_radius));
@@ -79,7 +79,7 @@ bool Pop::m_singlePop()
   double y_center = random(1, 7);
 
   //Assign color to whole grid. Before color is written to LED's, pixels with low intensity will be faded out. 
-  m_getRandomColor(m_color);
+  m_color = getRandomColor();
   m_fillSolidColor(m_color);
 
   //Calculate sum of sound levels, once they exceed a threshold procede with the animation
